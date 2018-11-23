@@ -1,0 +1,26 @@
+ConnectorTitle: ServiceNow
+AccessCodeServiceEndpoint: https://dev67911.service-now.com/oauth_auth.do
+AccessTokenServiceEndpoint: https://dev67911.service-now.com/oauth_token.do
+ApiEndPoint: https://dev67911.service-now.com/api/now/v1/table
+UserName: hide
+UserPassword: hide
+ClientId: required
+ClientSecret: required
+AccessCodeServiceUrl: hide
+AccessTokenServiceUrl: hide
+Personalized: !!bool true
+ApiKey: hide
+ServiceUrl: hide
+ServiceUrlHint: ''
+XML2JSON: hide
+ImpersonateOAuth: required
+Interface: hide
+Custom1: hide
+Custom1Label: Custom Field 1
+Custom1Hint: ''
+Custom2: hide
+Custom2Label: Custom Field 2
+Custom3: hide
+Custom2Hint: ''
+Custom3Label: Custom Field 3
+Custom3Hint: ''
