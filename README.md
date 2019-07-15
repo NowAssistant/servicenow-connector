@@ -1,3 +1,3 @@
-ServiceNow Connecor
+SN Connecor
 ===
 
