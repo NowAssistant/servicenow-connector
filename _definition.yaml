@@ -1,7 +1,7 @@
 ConnectorTitle: ServiceNow
-AccessCodeServiceEndpoint: https://dev67911.service-now.com/oauth_auth.do
-AccessTokenServiceEndpoint: https://dev67911.service-now.com/oauth_token.do
-ApiEndPoint: https://dev67911.service-now.com/api/now/v1/table
+AccessCodeServiceEndpoint: https://dev64094.service-now.com/oauth_auth.do
+AccessTokenServiceEndpoint: https://dev64094.service-now.com/oauth_token.do
+ApiEndPoint: https://dev64094.service-now.com/api/now/v1/table
 UserName: hide
 UserPassword: hide
 ClientId: required
