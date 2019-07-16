@@ -1,4 +1,4 @@
-const api = require('./api');
+const api = require('./common/api');
 
 module.exports = async activity => {
     try {

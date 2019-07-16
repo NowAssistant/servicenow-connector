@@ -1,0 +1,34 @@
+$type: form
+properties:
+  subject:
+    type: string
+    title: Subject
+    name: subject
+    required: !!bool true
+  description:
+    type: string
+    title: Description
+    xtype: textarea
+    name: description
+  urgency:
+    type: string
+    title: Urgency
+    xtype: enum
+    name: urgency
+    xvaluelist:
+      - value: 1
+        title: High
+      - value: 2
+        title: Medium
+      - value: 3
+        title: Low
+    default: 2
+rules:
+  - caption: 'Rule #1'
+    position: !!int 1
+    rule:
+      conditions:
+        kind: all
+        conditions: []
+      actions: []
+$meta: {}
