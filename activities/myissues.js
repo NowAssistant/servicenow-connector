@@ -5,13 +5,20 @@ module.exports = async function (activity) {
     api.initialize(activity);
 
     const pagination = $.pagination(activity);
-    const pageSize = parseInt(pagination.pageSize);
-    const offset = (parseInt(pagination.page) - 1) * pageSize;
+    let pageSize = parseInt(pagination.pageSize);
+    let offset = (parseInt(pagination.page) - 1) * pageSize;
+
+    // if its first page try get 100 items to get value for status
+    const page = parseInt(pagination.page);
+    if (page == 1) {
+      pageSize = 100;
+    }
 
     const response = await api(`/incident?sysparm_limit=${pageSize}&sysparm_offset=${offset}&sysparm_query=active%3Dtrue`);
     if ($.isErrorResponse(activity, response)) return;
 
     let items = response.body.result.map(item => convert_item(item));
+    let value = items.length;
 
     items.sort((a, b) => {
       a = new Date(a.date);
@@ -20,12 +27,25 @@ module.exports = async function (activity) {
       return a > b ? -1 : (a < b ? 1 : 0);
     });
 
+    // if its first page we return items requested in pagination.pageSize
+    if (page == 1) {
+
+      // if if pageSize is less than items.length we return items requested in pagination.pageSize
+      if(pageSize<items.length){
+        let filteredItems = [];
+
+        for(let i=0; i<pageSize; i++){
+          filteredItems.push(items[i]);
+        }
+        items = filteredItems;
+      }
+    }
+
     activity.Response.Data.items = items;
     if (parseInt(pagination.page) == 1) {
 
       // if pagesize is 99 return number of items else if page size is greater than number of items 
       // return number of items, else return pagesize
-      const value = pageSize == 99 ? items.length : (pageSize > items.length ? items.length : pageSize);
       activity.Response.Data.title = T(activity, 'My Issues');
       activity.Response.Data.link = 'https://dev64094.service-now.com/incident_list.do?sysparm_query=active=true^EQ&active=true&sysparm_clear_stack=true';
       activity.Response.Data.linkLabel = T(activity, 'All Issues');
