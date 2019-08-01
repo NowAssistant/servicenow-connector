@@ -10,11 +10,8 @@ module.exports = async function (activity) {
 
     // if its first page try get 100 items to get value for status
     const page = parseInt(pagination.page);
-    if (page == 1) {
-      pageSize = 100;
-    }
 
-    const response = await api(`/incident?sysparm_limit=${pageSize}&sysparm_offset=${offset}&sysparm_query=active%3Dtrue`);
+    const response = await api(`/incident?sysparm_limit=${page === 1 ? 100 : pageSize}&sysparm_offset=${offset}&sysparm_query=caller_id=javascript:gs.getUserID()^active=true`);
     if ($.isErrorResponse(activity, response)) return;
 
     let items = response.body.result.map(item => convert_item(item));
@@ -46,8 +43,8 @@ module.exports = async function (activity) {
 
       // if pagesize is 99 return number of items else if page size is greater than number of items 
       // return number of items, else return pagesize
-      activity.Response.Data.title = T(activity, 'My Issues');
-      activity.Response.Data.link = 'https://dev64094.service-now.com/incident_list.do?sysparm_query=active=true^EQ&active=true&sysparm_clear_stack=true';
+      activity.Response.Data.title = T(activity, 'Open Issues you\'ve created');
+      activity.Response.Data.link = `https://zensardemo2.service-now.com/incident_list.do?sysparm_query=active=true^EQ&active=true&sysparm_clear_stack=true`;
       activity.Response.Data.linkLabel = T(activity, 'All Issues');
       activity.Response.Data.actionable = value > 0;
 
@@ -55,10 +52,10 @@ module.exports = async function (activity) {
         activity.Response.Data.value = value;
         activity.Response.Data.date = activity.Response.Data.items[0].date;
         activity.Response.Data.color = 'blue';
-        activity.Response.Data.description = value > 1 ? T(activity, "You have {0} assigned issues.", value)
-          : T(activity, "You have 1 assigned issue.");
+        activity.Response.Data.description = value > 1 ? T(activity, "You have {0} open issues.", value)
+          : T(activity, "You have 1 open issue.");
       } else {
-        activity.Response.Data.description = T(activity, `You have no issues assigned.`);
+        activity.Response.Data.description = T(activity, `You have no open issues.`);
       }
     }
   } catch (error) {
@@ -71,7 +68,7 @@ module.exports = async function (activity) {
       title: _item.short_description,
       description: _item.description,
       date: convert_date(_item.opened_at),
-      link: 'https://dev64094.service-now.com/incident.do?sys_id=' + _item.number
+      link: `https://zensardemo2.service-now.com/nav_to.do?uri=incident.do?sys_id=${_item.sys_id}%26sysparm_view=sp`
     };
   }
 

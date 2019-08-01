@@ -21,12 +21,17 @@ module.exports = async (activity) => {
       case "submit":
         const form = _action.form;
         api.initialize(activity);
+
+        const userResponse = await api('/sys_user?sysparm_query=sys_id=javascript:gs.getUserID()');
+        const userId = userResponse.body.result[0].sys_id;
+
         var response = await api.post('/incident', {
           json: true,
           body: {
               short_description: form.subject,
               description: form.description,
-              urgency: form.urgency
+              urgency: form.urgency,
+              caller_id: userId
           }
         });
         var comment = T(activity, "Issue {0} created", response.body.result.number);
