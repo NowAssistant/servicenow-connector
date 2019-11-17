@@ -29,6 +29,8 @@ function api(path, opts) {
 
   const url = /^http(s)\:\/\/?/.test(path) && opts.endpoint ? path : opts.endpoint + path;
 
+  opts.throwHttpErrors=false;
+
   if (opts.stream) return got.stream(url, opts);
 
   return got(url, opts).catch((err) => {

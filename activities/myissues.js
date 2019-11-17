@@ -7,14 +7,23 @@ module.exports = async function (activity) {
     const pagination = $.pagination(activity);
     let pageSize = parseInt(pagination.pageSize);
     let offset = (parseInt(pagination.page) - 1) * pageSize;
+    let items = [];
+    let empty = false;
 
     // if its first page try get 100 items to get value for status
     const page = parseInt(pagination.page);
 
     const response = await api(`/incident?sysparm_limit=${page === 1 ? 100 : pageSize}&sysparm_offset=${offset}&sysparm_query=caller_id=javascript:gs.getUserID()^active=true`);
+    
+    // handle empty response statuscode
+    if(response.statusCode == 404) {
+      response.statusCode = 200;
+      empty = true;
+    }
+
     if ($.isErrorResponse(activity, response)) return;
 
-    let items = response.body.result.map(item => convert_item(item));
+    if(!empty) items = response.body.result.map(item => convert_item(item));
     let value = items.length;
 
     items.sort((a, b) => {
@@ -58,7 +67,7 @@ module.exports = async function (activity) {
         activity.Response.Data.description = T(activity, `You have no open issues.`);
       }
     }
-  } catch (error) {
+  } catch (error) {    
     $.handleError(activity, error);
   }
 
